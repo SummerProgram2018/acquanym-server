@@ -38,6 +38,8 @@ def get_nearby():
         cursor.execute(query)
         result = []
         for id, name, latitude, longitude in cursor:
+            latitude = float(latitude)
+            longitude = float(longitude)
             d = {
                 'id': id,
                 'name': name,
