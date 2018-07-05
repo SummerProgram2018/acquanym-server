@@ -10,6 +10,7 @@ DB_NAME = "ei8htideas"
 
 app = Flask(__name__)
 
+
 @contextmanager
 def open_db():
     cnx = mysql.connector.connect(user=USER, password=PWORD, host=HOST, database=DB_NAME)
