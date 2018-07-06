@@ -46,7 +46,7 @@ def gen_order(order, my_lat, my_long):
     return order_by
 
 
-@app.route('/searchallusers')
+@app.route('/searchallacqs')
 def search_all_users():
     my_lat = request.args.get('lat', default=-1, type=float)
     my_long = request.args.get('long', default=-1, type=float)
