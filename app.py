@@ -56,7 +56,7 @@ def search_all_acqs():
     with open_db() as cursor:
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
-                f"WHERE id != {my_id} " \
+                f"WHERE id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
                 f"WHERE user_from = {my_id}" \
@@ -78,7 +78,7 @@ def search_acqs():
     with open_db() as cursor:
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
-                f"WHERE name = {search} AND id != {my_id} " \
+                f"WHERE name = {search} AND id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
                 f"WHERE user_from = {my_id}" \
@@ -99,7 +99,7 @@ def search_all_users():
     with open_db() as cursor:
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
-                f"WHERE id != {my_id} " \
+                f"WHERE id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
                 f"WHERE user_from = {my_id}" \
@@ -121,7 +121,7 @@ def search_users():
     with open_db() as cursor:
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
-                f"WHERE name = {search} AND id != {my_id} " \
+                f"WHERE name = {search} AND id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
                 f"WHERE user_from = {my_id}" \
