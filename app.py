@@ -47,7 +47,7 @@ def gen_order(order, my_lat, my_long):
 
 
 @app.route('/searchallacqs')
-def search_all_users():
+def search_all_acqs():
     my_lat = request.args.get('lat', default=-1, type=float)
     my_long = request.args.get('long', default=-1, type=float)
     my_id = request.args.get('id', default=-1, type=int)
