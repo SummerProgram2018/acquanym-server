@@ -57,8 +57,8 @@ def search_all_acqs():
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
                 f"WHERE id IN (" \
-                f"SELECT to_id FROM acquaintances " \
-                f"WHERE from_id = {my_id}" \
+                f"SELECT user_to FROM acquaintances " \
+                f"WHERE user_from = {my_id}" \
                 f")"
 
         query += gen_order(order, my_lat, my_long)
@@ -79,8 +79,8 @@ def search_acqs():
         query = f"SELECT id, name, latitude, longitude FROM users " \
                 f"WHERE name = {search}" \
                 f"AND id IN (" \
-                f"SELECT to_id FROM acquaintances " \
-                f"WHERE from_id = {my_id}" \
+                f"SELECT user_to FROM acquaintances " \
+                f"WHERE user_from = {my_id}" \
                 f")"
 
         query += gen_order(order, my_lat, my_long)
@@ -99,8 +99,8 @@ def search_all_users():
 
         query = f"SELECT id, name, latitude, longitude FROM users " \
                 f"WHERE id NOT IN (" \
-                f"SELECT to_id FROM acquaintances " \
-                f"WHERE from_id = {my_id}" \
+                f"SELECT user_to FROM acquaintances " \
+                f"WHERE user_from = {my_id}" \
                 f")"
 
         query += gen_order(order, my_lat, my_long)
@@ -121,8 +121,8 @@ def search_users():
         query = f"SELECT id, name, latitude, longitude FROM users " \
                 f"WHERE name = {search}" \
                 f"AND id NOT IN (" \
-                f"SELECT to_id FROM acquaintances " \
-                f"WHERE from_id = {my_id}" \
+                f"SELECT user_to FROM acquaintances " \
+                f"WHERE user_from = {my_id}" \
                 f")"
 
         query += gen_order(order, my_lat, my_long)
