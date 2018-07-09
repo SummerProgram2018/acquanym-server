@@ -40,6 +40,11 @@ def write_lat_long():
     return EMPTY
 
 
+def calculate_distance(lat1, lat2, long1, long2):
+    return 12742 * math.asin(math.sqrt(0.5 - math.cos((lat2 - lat1) * P)/2 + math.cos(lat1 * P) *
+                                       math.cos(lat2 * 2) * (1 - math.cos((long2 - long1))/2)))
+
+
 def execute(cursor, query, my_lat, my_long):
     cursor.execute(query)
     result = []
@@ -51,7 +56,7 @@ def execute(cursor, query, my_lat, my_long):
             'name': name,
             'latitude': latitude,
             'longitude': longitude,
-            'distance': math.sqrt((my_lat - latitude) ** 2 + (my_long - longitude) ** 2)
+            'distance': calculate_distance(my_lat, latitude, my_long, longitude)
         }
         result.append(d)
 
