@@ -7,6 +7,10 @@ HOST = "db4free.net"
 USER = "hobrien17"
 PWORD = "dbpword1"
 DB_NAME = "ei8htideas"
+EMPTY = ""
+P = math.pi/180
+DIST_CALC = "12742 * ASIN(SQRT(0.5 - COS((latitude - {}) * {})/2 + COS({} * {}) * COS(latitude * {}) * " \
+                  "(1 - COS((longitude - {}) * {}))/2))"
 
 app = Flask(__name__)
 
@@ -21,7 +25,7 @@ def open_db():
 
 @app.route('/writelatlong')
 def write_lat_long():
-    user = request.args.get('user', default=-1, type=int)
+    user = request.args.get('id', default=-1, type=int)
     lat = request.args.get('lat', default=-1, type=float)
     long = request.args.get('long', default=-1, type=float)
 
@@ -32,6 +36,8 @@ def write_lat_long():
                 f"WHERE id = {user}"
 
         cursor.execute(query)
+
+    return EMPTY
 
 
 def execute(cursor, query, my_lat, my_long):
@@ -55,7 +61,7 @@ def execute(cursor, query, my_lat, my_long):
 def gen_order(order, my_lat, my_long):
     order_by = ""
     if order == "distance":
-        order_by = f"ORDER BY (SQRT(POWER({my_lat} - latitude, 2) + POWER({my_long} - longitude, 2)))"
+        order_by = f"ORDER BY ({DIST_CALC.format(my_lat, P, my_lat, P, P, my_long, P)})"
     elif order == "name":
         order_by = f"ORDER BY name"
     return order_by
@@ -147,10 +153,11 @@ def search_users():
         return jsonify(execute(cursor, query, my_lat, my_long))
 
 
-@app.route('/nearby')
+@app.route('/nearbyacqs')
 def get_nearby():
     my_lat = request.args.get('lat', default=-1, type=float)
     my_long = request.args.get('long', default=-1, type=float)
+    my_id = request.args.get('id', default=-1, type=float)
     src_range = request.args.get('range', default=0, type=float)
 
     with open_db() as cursor:
@@ -161,6 +168,10 @@ def get_nearby():
         min_long = my_long - src_range
         query = f"SELECT id, name, latitude, longitude FROM users " \
                 f"WHERE (latitude BETWEEN {min_lat} AND {max_lat}) AND (longitude BETWEEN {min_long} AND {max_long}) " \
+                f"AND id IN (" \
+                f"SELECT user_to FROM acquaintances " \
+                f"WHERE user_from = {my_id}" \
+                f") " \
                 f"ORDER BY (SQRT(POWER({my_lat} - latitude, 2) + POWER({my_long} - longitude, 2)))"
 
     return jsonify(execute(cursor, query, my_lat, my_long))
