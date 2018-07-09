@@ -19,6 +19,21 @@ def open_db():
     cnx.close()
 
 
+@app.route('/writelatlong')
+def write_lat_long():
+    user = request.args.get('user', default=-1, type=int)
+    lat = request.args.get('lat', default=-1, type=float)
+    long = request.args.get('long', default=-1, type=float)
+
+    with open_db() as cursor:
+
+        query = f"UPDATE users " \
+                f"SET latitude = {lat}, longitude = {long} " \
+                f"WHERE id = {user}"
+
+        cursor.execute(query)
+
+
 def execute(cursor, query, my_lat, my_long):
     cursor.execute(query)
     result = []
