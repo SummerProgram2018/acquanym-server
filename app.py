@@ -43,7 +43,7 @@ def write_lat_long():
 
 def calculate_distance(lat1, lat2, long1, long2):
     return 12742 * math.asin(math.sqrt(0.5 - math.cos((lat2 - lat1) * P)/2 + math.cos(lat1 * P) *
-                                       math.cos(lat2 * P) * (1 - math.cos((long2 - long1) * P)/2)))
+                                       math.cos(lat2 * P) * (1 - math.cos((long2 - long1) * P))/2))
 
 
 def execute(cursor, query, my_lat, my_long):
@@ -68,8 +68,11 @@ def execute(cursor, query, my_lat, my_long):
 def gen_order(order, my_lat, my_long):
     order_by = ""
     if order == "distance":
+        print("dist")
         order_by = f"ORDER BY ({DIST_CALC.format(my_lat, P, my_lat, P, P, my_long, P)})"
+        print(order_by)
     elif order == "name":
+        print("name")
         order_by = f"ORDER BY name"
     return order_by
 
