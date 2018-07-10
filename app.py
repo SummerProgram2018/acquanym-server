@@ -229,8 +229,8 @@ def get_nearby():
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
                 f"WHERE user_from = {my_id}" \
-                f") " \
-                f"ORDER BY (SQRT(POWER({my_lat} - latitude, 2) + POWER({my_long} - longitude, 2)))"
+                f")"
+        query += gen_order("distance", my_lat, my_long)
 
     return jsonify(execute(cursor, query, my_lat, my_long))
 
