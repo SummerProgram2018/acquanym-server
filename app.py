@@ -49,7 +49,7 @@ def calculate_distance(lat1, lat2, long1, long2):
 def execute(cursor, query, my_lat, my_long):
     cursor.execute(query)
     result = []
-    for id, name, latitude, longitude in cursor:
+    for id, name, latitude, longitude, title in cursor:
         latitude = float(latitude)
         longitude = float(longitude)
         d = {
@@ -57,7 +57,8 @@ def execute(cursor, query, my_lat, my_long):
             'name': name,
             'latitude': latitude,
             'longitude': longitude,
-            'distance': calculate_distance(my_lat, latitude, my_long, longitude)
+            'distance': calculate_distance(my_lat, latitude, my_long, longitude),
+            'title': title
         }
         result.append(d)
 
@@ -82,7 +83,7 @@ def search_all_acqs():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
                 f"WHERE id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -104,7 +105,7 @@ def search_acqs():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
                 f"WHERE name = \"{search}\" AND id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -125,7 +126,7 @@ def search_all_users():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
                 f"WHERE id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -147,7 +148,7 @@ def search_users():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
                 f"WHERE name = \"{search}\" AND id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -172,7 +173,7 @@ def get_nearby():
         min_lat = my_lat - src_range
         max_long = my_long + src_range
         min_long = my_long - src_range
-        query = f"SELECT id, name, latitude, longitude FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
                 f"WHERE (latitude BETWEEN {min_lat} AND {max_lat}) AND (longitude BETWEEN {min_long} AND {max_long}) " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
