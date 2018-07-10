@@ -83,10 +83,9 @@ def write_lat_long():
         query = f"UPDATE users " \
                 f"SET latitude = {lat}, longitude = {long} " \
                 f"WHERE id = {user}"
+        print(query)
 
         cursor.execute(query)
-
-        print("exec")
 
     return EMPTY
 
