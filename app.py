@@ -9,7 +9,8 @@ PWORD = "dbpword1"
 DB_NAME = "ei8htideas"
 EMPTY = ""
 P = math.pi/180
-DIST_CALC = "12742 * ASIN(SQRT(0.5 - COS((latitude - {}) * {})/2 + COS({} * {}) * COS(latitude * {}) * " \
+DIST_CALC = "12742 * ASIN(SQRT(0.5 - COS((latitude - {}) * {})/2 " \
+            "+ COS({} * {}) * COS(latitude * {}) * " \
                   "(1 - COS((longitude - {}) * {}))/2))"
 
 app = Flask(__name__)
@@ -42,7 +43,7 @@ def write_lat_long():
 
 def calculate_distance(lat1, lat2, long1, long2):
     return 12742 * math.asin(math.sqrt(0.5 - math.cos((lat2 - lat1) * P)/2 + math.cos(lat1 * P) *
-                                       math.cos(lat2 * 2) * (1 - math.cos((long2 - long1))/2)))
+                                       math.cos(lat2 * P) * (1 - math.cos((long2 - long1) * P)/2)))
 
 
 def execute(cursor, query, my_lat, my_long):
