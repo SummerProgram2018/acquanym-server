@@ -24,6 +24,54 @@ def open_db():
     cnx.close()
 
 
+@app.route('/addacq')
+def add_acq():
+    my_id = request.args.get('id', default=-1, type=int)
+    their_id = request.args.get('user', default=-1, type=int)
+
+    with open_db() as cursor:
+
+        query = f"INSERT INTO acquaintances (user_from, user_to, confirmed) " \
+                f"VALUES ({my_id}, {their_id}, 0)"
+
+        cursor.execute(query)
+
+    return EMPTY
+
+
+@app.route('/confirmacq')
+def confirm_acq():
+    my_id = request.args.get('id', default=-1, type=int)
+    their_id = request.args.get('user', default=-1, type=int)
+
+    with open_db() as cursor:
+
+        query = f"UPDATE acquaintances " \
+                 f"SET confirmed = 1 " \
+                 f"WHERE user_from = {their_id} AND user_to = {my_id}"
+
+        cursor.execute(query)
+
+    return EMPTY
+
+
+@app.route('/checkrequests')
+def check_requests():
+    my_id = request.args.get('id', default=-1, type=int)
+    my_lat = request.args.get('lat', default=-1, type=float)
+    my_long = request.args.get('long', default=-1, type=float)
+
+    with open_db() as cursor:
+
+        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+                f"WHERE id IN (" \
+                f"SELECT user_from FROM acquaintances " \
+                f"WHERE user_to = {my_id} AND confirmed = 0 " \
+                f")"
+
+        return jsonify(execute(cursor, query, my_lat, my_long))
+
+
 @app.route('/writelatlong')
 def write_lat_long():
     user = request.args.get('id', default=-1, type=int)
