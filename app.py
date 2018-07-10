@@ -86,6 +86,8 @@ def write_lat_long():
 
         cursor.execute(query)
 
+        print("exec")
+
     return EMPTY
 
 
