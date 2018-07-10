@@ -232,7 +232,7 @@ def get_nearby():
                 f")"
         query += gen_order("distance", my_lat, my_long)
 
-    return jsonify(execute(cursor, query, my_lat, my_long))
+        return jsonify(execute(cursor, query, my_lat, my_long))
 
 
 if __name__ == "__main__":
