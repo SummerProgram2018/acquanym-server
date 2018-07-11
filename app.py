@@ -137,15 +137,23 @@ def verify_pword():
 
     with open_db() as cursor:
 
-        query = f"SELECT username, password FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, username, password FROM users " \
                 f"WHERE username = \"{username}\""
 
         cursor.execute(query)
-        for u, p in cursor:
+        for id, name, latitude, longitude, title, u, p in cursor:
             if p == pword:
-                return "true"
+                d = {
+                    'id': id,
+                    'name': name,
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'distance': 0,
+                    'title': title
+                }
+                return jsonify([d])
 
-    return "false"
+    return jsonify([])
 
 
 @app.route('/searchallacqs')
