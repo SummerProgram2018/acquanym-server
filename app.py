@@ -21,6 +21,7 @@ def open_db():
     cnx = mysql.connector.connect(user=USER, password=PWORD, host=HOST, database=DB_NAME)
     cursor = cnx.cursor()
     yield cursor
+    cnx.commit()
     cnx.close()
 
 
@@ -86,6 +87,7 @@ def write_lat_long():
         print(query)
 
         cursor.execute(query)
+        print(cursor)
 
     return EMPTY
 
