@@ -144,7 +144,8 @@ def verify_pword():
         for u, p in cursor:
             if p == pword:
                 return 1
-            return 0
+
+    return 0
 
 
 @app.route('/searchallacqs')
