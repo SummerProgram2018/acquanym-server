@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 import math
-import hashlib
 from contextlib import contextmanager
 
 HOST = "db4free.net"
@@ -129,30 +128,23 @@ def gen_order(order, my_lat, my_long):
     return order_by
 
 
-def bytes_to_str(byts):
-    res = ""
-    for b in byts:
-        res += "{:x}".format(b).zfill(2)
-    return res
-
-
 @app.route('/verifylogin')
 def verify_pword():
     # username is encrypted using MD5, pword encrypted using SHA1
     # TODO: use better encrpytion techniques
-    username = hashlib.md5(bytes(request.args.get('username', default="", type=str), 'utf-8')).digest()
-    pword = hashlib.sha1(bytes(request.args.get('pword', default="", type=str), 'utf-8')).digest()
+    username = request.args.get('username', default="", type=str)
+    pword = request.args.get('pword', default="", type=str)
 
     with open_db() as cursor:
 
         query = f"SELECT username, password FROM users " \
-                f"WHERE username = {username}"
+                f"WHERE username = \"{username}\""
 
         cursor.execute(query)
         for u, p in cursor:
             if p == pword:
-                return True
-            return False
+                return 1
+            return 0
 
 
 @app.route('/searchallacqs')
