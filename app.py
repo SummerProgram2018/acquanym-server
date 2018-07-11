@@ -142,6 +142,8 @@ def verify_pword():
 
         cursor.execute(query)
         for id, name, latitude, longitude, title, u, p in cursor:
+            latitude = float(latitude)
+            longitude = float(longitude)
             if p == pword:
                 d = {
                     'id': id,
