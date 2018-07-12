@@ -144,7 +144,7 @@ def new_account():
             return jsonify([])
 
         query = f"INSERT INTO users (username, password, name) " \
-                f"VALUES ({username}, {pword}, {name})"
+                f"VALUES (\"{username}\", \"{pword}\", \"{name}\")"
         cursor.execute(query)
 
         id_query = f"SELECT id FROM users " \
