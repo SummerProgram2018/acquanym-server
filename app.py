@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 import math
+import datetime
 from contextlib import contextmanager
 
 HOST = "db4free.net"
@@ -23,6 +24,12 @@ def open_db():
     yield cursor
     cnx.commit()
     cnx.close()
+
+
+def get_age(dob_str):
+    dob = datetime.datetime.strptime(dob_str, "%Y-%m-%d").date()
+    today = datetime.date.today()
+    return (today - dob) // datetime.timedelta(days=365.2425)
 
 
 @app.route('/addacq')
@@ -100,7 +107,7 @@ def calculate_distance(lat1, lat2, long1, long2):
 def execute(cursor, query, my_lat, my_long):
     cursor.execute(query)
     result = []
-    for id, name, latitude, longitude, title in cursor:
+    for id, name, latitude, longitude, title, dob, gender, description in cursor:
         latitude = float(latitude)
         longitude = float(longitude)
         d = {
@@ -109,7 +116,10 @@ def execute(cursor, query, my_lat, my_long):
             'latitude': latitude,
             'longitude': longitude,
             'distance': calculate_distance(my_lat, latitude, my_long, longitude),
-            'title': title
+            'title': title,
+            'age': get_age(dob),
+            'gender': gender,
+            'description': description
         }
         result.append(d)
 
@@ -202,7 +212,7 @@ def search_all_acqs():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -224,7 +234,7 @@ def search_acqs():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE name = \"{search}\" AND id <> {my_id} " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -245,7 +255,7 @@ def search_all_users():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -267,7 +277,7 @@ def search_users():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE name = \"{search}\" AND id <> {my_id} " \
                 f"AND id NOT IN (" \
                 f"SELECT user_to FROM acquaintances " \
@@ -292,7 +302,7 @@ def get_nearby():
         min_lat = my_lat - src_range
         max_long = my_long + src_range
         min_long = my_long - src_range
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE (latitude BETWEEN {min_lat} AND {max_lat}) AND (longitude BETWEEN {min_long} AND {max_long}) " \
                 f"AND id IN (" \
                 f"SELECT user_to FROM acquaintances " \
