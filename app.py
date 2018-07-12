@@ -128,6 +128,41 @@ def gen_order(order, my_lat, my_long):
     return order_by
 
 
+@app.route('/newaccount')
+def new_account():
+    username = request.args.get('username', default="", type=str)
+    pword = request.args.get('pword', default="", type=str)
+    name = request.args.get('name', default="", type=str)
+
+    with open_db() as cursor:
+
+        src_query = f"SELECT username FROM users " \
+                    f"WHERE username = \"{username}\""
+        cursor.execute(src_query)
+        for username in cursor:
+            print(username)
+            return jsonify([])
+
+        query = f"INSERT INTO users (username, password, name) " \
+                f"VALUES ({username}, {pword}, {name})"
+        cursor.execute(query)
+
+        id_query = f"SELECT id FROM users " \
+                   f"WHERE username = \"{username}\""
+        cursor.execute(id_query)
+        id = None
+        for i in cursor:
+            id = i
+
+        d = {
+            'id': id,
+            'username': username,
+            'pword': pword,
+            'name': name
+        }
+        return jsonify([d])
+
+
 @app.route('/verifylogin')
 def verify_pword():
     # username is encrypted using MD5, pword encrypted using SHA1
