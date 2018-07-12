@@ -107,6 +107,7 @@ def execute(cursor, query, my_lat, my_long):
     cursor.execute(query)
     result = []
     for id, name, latitude, longitude, title, dob, gender, description in cursor:
+        print(id, name, latitude, longitude, title, dob, gender, description)
         latitude = float(latitude)
         longitude = float(longitude)
         d = {
