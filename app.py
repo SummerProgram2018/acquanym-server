@@ -72,7 +72,7 @@ def check_requests():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
                 f"WHERE id IN (" \
                 f"SELECT user_from FROM acquaintances " \
                 f"WHERE user_to = {my_id} AND confirmed = 0 " \
