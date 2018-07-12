@@ -143,6 +143,8 @@ def new_account():
     username = request.args.get('username', default="", type=str)
     pword = request.args.get('pword', default="", type=str)
     name = request.args.get('name', default="", type=str)
+    lat = request.args.get('lat', default="", type=float)
+    long = request.args.get('long', default="", type=float)
 
     with open_db() as cursor:
 
@@ -153,8 +155,8 @@ def new_account():
             print(username)
             return jsonify([])
 
-        query = f"INSERT INTO users (username, password, name) " \
-                f"VALUES (\"{username}\", \"{pword}\", \"{name}\")"
+        query = f"INSERT INTO users (username, password, name, latitude, longitude) " \
+                f"VALUES (\"{username}\", \"{pword}\", \"{name}\", {lat}, {long})"
         cursor.execute(query)
 
         id_query = f"SELECT id FROM users " \
