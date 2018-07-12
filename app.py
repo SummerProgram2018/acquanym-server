@@ -26,8 +26,7 @@ def open_db():
     cnx.close()
 
 
-def get_age(dob_str):
-    dob = datetime.datetime.strptime(dob_str, "%Y-%m-%d").date()
+def get_age(dob):
     today = datetime.date.today()
     return (today - dob) // datetime.timedelta(days=365.2425)
 
