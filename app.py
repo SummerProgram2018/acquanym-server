@@ -139,7 +139,7 @@ def new_account():
         src_query = f"SELECT username FROM users " \
                     f"WHERE username = \"{username}\""
         cursor.execute(src_query)
-        for username in cursor:
+        for username, in cursor:
             print(username)
             return jsonify([])
 
@@ -151,7 +151,7 @@ def new_account():
                    f"WHERE username = \"{username}\""
         cursor.execute(id_query)
         id = None
-        for i in cursor:
+        for i, in cursor:
             id = i
 
         d = {
