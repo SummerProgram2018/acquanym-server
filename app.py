@@ -27,6 +27,8 @@ def open_db():
 
 
 def get_age(dob):
+    if dob is None:
+        return -1
     today = datetime.date.today()
     return (today - dob) // datetime.timedelta(days=365.2425)
 
@@ -143,8 +145,8 @@ def new_account():
     username = request.args.get('username', default="", type=str)
     pword = request.args.get('pword', default="", type=str)
     name = request.args.get('name', default="", type=str)
-    lat = request.args.get('lat', default="", type=float)
-    long = request.args.get('long', default="", type=float)
+    lat = request.args.get('lat', default=0, type=float)
+    long = request.args.get('long', default=0, type=float)
 
     with open_db() as cursor:
 
