@@ -293,6 +293,17 @@ def search_users():
         return jsonify(execute(cursor, query, my_lat, my_long))
 
 
+@app.route('/details')
+def get_details():
+    my_id = request.args.get('id', default=-1, type=int)
+    with open_db() as cursor:
+
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description FROM users " \
+                f"WHERE id = {my_id}"
+
+        return jsonify(execute(cursor, query, 0, 0))
+
+
 @app.route('/nearbyacqs')
 def get_nearby():
     my_lat = request.args.get('lat', default=-1, type=float)
