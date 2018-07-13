@@ -190,7 +190,7 @@ def new_account():
             'username': username,
             'pword': pword,
             'name': name,
-            'age': get_age(datetime.datetime.strptime(dob, '%Y-%m-%d'))
+            'age': get_age(datetime.datetime.strptime(dob, '%Y-%m-%d')),
             'title': title,
             'description': desc
         }
