@@ -161,6 +161,9 @@ def new_account():
     name = request.args.get('name', default="", type=str)
     lat = request.args.get('lat', default=0, type=float)
     long = request.args.get('long', default=0, type=float)
+    dob = request.args.get('dob', default='2000-01-01', type=str)
+    title = request.args.get('title', default="", type=str)
+    desc = request.args.get('desc', default="", type=str)
 
     with open_db() as cursor:
 
@@ -171,8 +174,8 @@ def new_account():
             print(username)
             return jsonify([])
 
-        query = f"INSERT INTO users (username, password, name, latitude, longitude) " \
-                f"VALUES (\"{username}\", \"{pword}\", \"{name}\", {lat}, {long})"
+        query = f"INSERT INTO users (username, password, name, latitude, longitude, dob, title, description) " \
+                f"VALUES (\"{username}\", \"{pword}\", \"{name}\", {lat}, {long}, {dob}, \"{title}\", \"{desc}\")"
         cursor.execute(query)
 
         id_query = f"SELECT id FROM users " \
@@ -186,7 +189,10 @@ def new_account():
             'id': id,
             'username': username,
             'pword': pword,
-            'name': name
+            'name': name,
+            'age': get_age(datetime.datetime.strptime(dob, '%Y-%m-%d'))
+            'title': title,
+            'description': desc
         }
         return jsonify([d])
 
