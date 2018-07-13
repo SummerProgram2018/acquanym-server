@@ -206,11 +206,11 @@ def verify_pword():
 
     with open_db() as cursor:
 
-        query = f"SELECT id, name, latitude, longitude, title, username, password FROM users " \
+        query = f"SELECT id, name, latitude, longitude, title, dob, gender, description, username, password FROM users " \
                 f"WHERE username = \"{username}\""
 
         cursor.execute(query)
-        for id, name, latitude, longitude, title, u, p in cursor:
+        for id, name, latitude, longitude, title, dob, gender, description, u, p in cursor:
             latitude = float(latitude)
             longitude = float(longitude)
             if p == pword:
@@ -220,7 +220,10 @@ def verify_pword():
                     'latitude': latitude,
                     'longitude': longitude,
                     'distance': 0,
-                    'title': title
+                    'age': get_age(dob),
+                    'title': title,
+                    'decription': description,
+                    'gender': gender
                 }
                 return jsonify([d])
 
