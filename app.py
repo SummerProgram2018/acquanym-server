@@ -222,7 +222,7 @@ def verify_pword():
                     'distance': 0,
                     'age': get_age(dob),
                     'title': title,
-                    'decription': description,
+                    'description': description,
                     'gender': gender
                 }
                 return jsonify([d])
