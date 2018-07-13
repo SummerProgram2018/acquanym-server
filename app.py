@@ -64,6 +64,20 @@ def confirm_acq():
     return EMPTY
 
 
+@app.route('/delreq')
+def del_req():
+    my_id = request.args.get('id', default=-1, type=int)
+    their_id = request.args.get('user', default=-1, type=int)
+
+    with open_db() as cursor:
+        query = f"DELETE FROM acquaintances " \
+                f"WHERE user_from = {their_id} AND user_to = {my_id} "
+
+        cursor.execute(query)
+
+    return EMPTY
+
+
 @app.route('/checkrequests')
 def check_requests():
     my_id = request.args.get('id', default=-1, type=int)
